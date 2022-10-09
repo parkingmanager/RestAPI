@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ParkingLiteDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EspacioDelimitado">
+          <Key>
+            <PropertyRef Name="IdEspacioDelimitado" />
+          </Key>
+          <Property Name="IdEspacioDelimitado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Coord1" Type="varchar" MaxLength="50" />
+          <Property Name="Coord2" Type="varchar" MaxLength="50" />
+          <Property Name="Coord3" Type="varchar" MaxLength="50" />
+          <Property Name="Coord4" Type="varchar" MaxLength="50" />
+          <Property Name="Habilitado" Type="bit" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" />
+          <Property Name="Eliminado" Type="datetime" />
+          <Property Name="IdLote" Type="int" />
+          <Property Name="FechaCreacion" Type="datetime" />
+          <Property Name="Indice" Type="int" />
+        </EntityType>
+        <EntityType Name="Lote">
+          <Key>
+            <PropertyRef Name="IdLote" />
+          </Key>
+          <Property Name="IdLote" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="200" />
+          <Property Name="Nit" Type="varchar" MaxLength="200" />
+          <Property Name="Email" Type="varchar" MaxLength="200" />
+          <Property Name="Identificador" Type="varchar" MaxLength="200" />
+          <Property Name="Token" Type="varchar" MaxLength="200" />
+          <Property Name="Direccion" Type="varchar" MaxLength="200" />
+          <Property Name="Eliminado" Type="datetime" />
+          <Property Name="FechaCreacion" Type="datetime" />
+          <Property Name="FuenteVideo" Type="varchar" MaxLength="200" />
+          <Property Name="RutaModelo" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Monitoreo">
+          <Key>
+            <PropertyRef Name="IdMonitoreo" />
+          </Key>
+          <Property Name="IdMonitoreo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEspacioDelimitado" Type="int" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tarifa">
+          <Key>
+            <PropertyRef Name="IdTarifa" />
+          </Key>
+          <Property Name="IdTarifa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLote" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="PrecioFraccion" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="PrecioFijo" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="FraccionMinimaPrecioFijo" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="Placa" />
+          </Key>
+          <Property Name="Placa" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="Marca" Type="varchar" MaxLength="100" />
+          <Property Name="Linea" Type="varchar" MaxLength="100" />
+          <Property Name="Modelo" Type="varchar" MaxLength="100" />
+          <Property Name="Clase" Type="varchar" MaxLength="100" />
+          <Property Name="NumeroMotor" Type="varchar" MaxLength="100" />
+          <Property Name="Vin" Type="varchar" MaxLength="100" />
+          <Property Name="FechaActualizacion" Type="datetime" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VehiculoTransaccion">
+          <Key>
+            <PropertyRef Name="IdTransaccion" />
+          </Key>
+          <Property Name="IdTransaccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLote" Type="int" Nullable="false" />
+          <Property Name="Placa" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TipoTransaccion" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="Eliminado" Type="datetime" />
+          <Property Name="Guid" Type="varchar(max)" Nullable="false" />
+          <Property Name="Valor" Type="int" />
+        </EntityType>
+        <Association Name="FK_EspacioDelimitado_Lote">
+          <End Role="Lote" Type="Self.Lote" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EspacioDelimitado" Type="Self.EspacioDelimitado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="EspacioDelimitado">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Monitoreo_EspacioDelimitado">
+          <End Role="EspacioDelimitado" Type="Self.EspacioDelimitado" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Monitoreo" Type="Self.Monitoreo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EspacioDelimitado">
+              <PropertyRef Name="IdEspacioDelimitado" />
+            </Principal>
+            <Dependent Role="Monitoreo">
+              <PropertyRef Name="IdEspacioDelimitado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tarifa_Lote">
+          <End Role="Lote" Type="Self.Lote" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tarifa" Type="Self.Tarifa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="Tarifa">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehiculoTransaccion_Lote">
+          <End Role="Lote" Type="Self.Lote" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VehiculoTransaccion" Type="Self.VehiculoTransaccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="VehiculoTransaccion">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehiculoTransaccion_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="1" />
+          <End Role="VehiculoTransaccion" Type="Self.VehiculoTransaccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="Placa" />
+            </Principal>
+            <Dependent Role="VehiculoTransaccion">
+              <PropertyRef Name="Placa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParkingLiteDBModelStoreContainer">
+          <EntitySet Name="EspacioDelimitado" EntityType="Self.EspacioDelimitado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lote" EntityType="Self.Lote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Monitoreo" EntityType="Self.Monitoreo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tarifa" EntityType="Self.Tarifa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VehiculoTransaccion" EntityType="Self.VehiculoTransaccion" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_EspacioDelimitado_Lote" Association="Self.FK_EspacioDelimitado_Lote">
+            <End Role="Lote" EntitySet="Lote" />
+            <End Role="EspacioDelimitado" EntitySet="EspacioDelimitado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Monitoreo_EspacioDelimitado" Association="Self.FK_Monitoreo_EspacioDelimitado">
+            <End Role="EspacioDelimitado" EntitySet="EspacioDelimitado" />
+            <End Role="Monitoreo" EntitySet="Monitoreo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tarifa_Lote" Association="Self.FK_Tarifa_Lote">
+            <End Role="Lote" EntitySet="Lote" />
+            <End Role="Tarifa" EntitySet="Tarifa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehiculoTransaccion_Lote" Association="Self.FK_VehiculoTransaccion_Lote">
+            <End Role="Lote" EntitySet="Lote" />
+            <End Role="VehiculoTransaccion" EntitySet="VehiculoTransaccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehiculoTransaccion_Vehiculo" Association="Self.FK_VehiculoTransaccion_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="VehiculoTransaccion" EntitySet="VehiculoTransaccion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ParkingLiteDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EspacioDelimitado">
+          <Key>
+            <PropertyRef Name="IdEspacioDelimitado" />
+          </Key>
+          <Property Name="IdEspacioDelimitado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Coord1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Coord2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Coord3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Coord4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Habilitado" Type="Boolean" />
+          <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Eliminado" Type="DateTime" Precision="3" />
+          <Property Name="IdLote" Type="Int32" />
+          <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Lote" Relationship="Self.FK_EspacioDelimitado_Lote" FromRole="EspacioDelimitado" ToRole="Lote" />
+          <Property Name="Indice" Type="Int32" />
+          <NavigationProperty Name="Monitoreos" Relationship="ParkingLiteDBModel.FK_Monitoreo_EspacioDelimitado" FromRole="EspacioDelimitado" ToRole="Monitoreo" />
+        </EntityType>
+        <EntityType Name="Lote">
+          <Key>
+            <PropertyRef Name="IdLote" />
+          </Key>
+          <Property Name="IdLote" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Nit" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Identificador" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Token" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EspacioDelimitadoes" Relationship="Self.FK_EspacioDelimitado_Lote" FromRole="Lote" ToRole="EspacioDelimitado" />
+          <Property Name="Direccion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Eliminado" Type="DateTime" Precision="3" />
+          <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="FuenteVideo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RutaModelo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="VehiculoTransaccions" Relationship="ParkingLiteDBModel.FK_VehiculoTransaccion_Lote" FromRole="Lote" ToRole="VehiculoTransaccion" />
+          <NavigationProperty Name="Tarifas" Relationship="ParkingLiteDBModel.FK_Tarifa_Lote" FromRole="Lote" ToRole="Tarifa" />
+        </EntityType>
+        <Association Name="FK_EspacioDelimitado_Lote">
+          <End Role="Lote" Type="Self.Lote" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EspacioDelimitado" Type="Self.EspacioDelimitado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="EspacioDelimitado">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParkingLiteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EspaciosDelimitados" EntityType="Self.EspacioDelimitado" />
+          <EntitySet Name="Lotes" EntityType="Self.Lote" />
+          <AssociationSet Name="FK_EspacioDelimitado_Lote" Association="Self.FK_EspacioDelimitado_Lote">
+            <End Role="Lote" EntitySet="Lotes" />
+            <End Role="EspacioDelimitado" EntitySet="EspaciosDelimitados" />
+          </AssociationSet>
+          <EntitySet Name="Vehiculos" EntityType="ParkingLiteDBModel.Vehiculo" />
+          <EntitySet Name="VehiculoTransacciones" EntityType="ParkingLiteDBModel.VehiculoTransaccion" />
+          <AssociationSet Name="FK_VehiculoTransaccion_Vehiculo" Association="ParkingLiteDBModel.FK_VehiculoTransaccion_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+            <End Role="VehiculoTransaccion" EntitySet="VehiculoTransacciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehiculoTransaccion_Lote" Association="ParkingLiteDBModel.FK_VehiculoTransaccion_Lote">
+            <End Role="Lote" EntitySet="Lotes" />
+            <End Role="VehiculoTransaccion" EntitySet="VehiculoTransacciones" />
+          </AssociationSet>
+          <EntitySet Name="Tarifas" EntityType="ParkingLiteDBModel.Tarifa" />
+          <AssociationSet Name="FK_Tarifa_Lote" Association="ParkingLiteDBModel.FK_Tarifa_Lote">
+            <End Role="Lote" EntitySet="Lotes" />
+            <End Role="Tarifa" EntitySet="Tarifas" />
+          </AssociationSet>
+          <EntitySet Name="Monitoreos" EntityType="ParkingLiteDBModel.Monitoreo" />
+          <AssociationSet Name="FK_Monitoreo_EspacioDelimitado" Association="ParkingLiteDBModel.FK_Monitoreo_EspacioDelimitado">
+            <End Role="EspacioDelimitado" EntitySet="EspaciosDelimitados" />
+            <End Role="Monitoreo" EntitySet="Monitoreos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="Placa" />
+          </Key>
+          <Property Name="Placa" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="Marca" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Linea" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Clase" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NumeroMotor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Vin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="VehiculoTransaccions" Relationship="ParkingLiteDBModel.FK_VehiculoTransaccion_Vehiculo" FromRole="Vehiculo" ToRole="VehiculoTransaccion" />
+          <Property Name="FechaActualizacion" Type="DateTime" Precision="3" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="VehiculoTransaccion">
+          <Key>
+            <PropertyRef Name="IdTransaccion" />
+          </Key>
+          <Property Name="IdTransaccion" Type="Int32" Nullable="false" />
+          <Property Name="Placa" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="TipoTransaccion" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Vehiculo" Relationship="ParkingLiteDBModel.FK_VehiculoTransaccion_Vehiculo" FromRole="VehiculoTransaccion" ToRole="Vehiculo" />
+          <Property Name="IdLote" Type="Int32" Nullable="false" />
+          <Property Name="Eliminado" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Lote" Relationship="ParkingLiteDBModel.FK_VehiculoTransaccion_Lote" FromRole="VehiculoTransaccion" ToRole="Lote" />
+          <Property Name="Guid" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Valor" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_VehiculoTransaccion_Vehiculo">
+          <End Type="ParkingLiteDBModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
+          <End Type="ParkingLiteDBModel.VehiculoTransaccion" Role="VehiculoTransaccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="Placa" />
+            </Principal>
+            <Dependent Role="VehiculoTransaccion">
+              <PropertyRef Name="Placa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehiculoTransaccion_Lote">
+          <End Type="ParkingLiteDBModel.Lote" Role="Lote" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ParkingLiteDBModel.VehiculoTransaccion" Role="VehiculoTransaccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="VehiculoTransaccion">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Tarifa">
+          <Key>
+            <PropertyRef Name="IdTarifa" />
+          </Key>
+          <Property Name="IdTarifa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLote" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PrecioFraccion" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="PrecioFijo" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="FraccionMinimaPrecioFijo" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="Lote" Relationship="ParkingLiteDBModel.FK_Tarifa_Lote" FromRole="Tarifa" ToRole="Lote" />
+        </EntityType>
+        <Association Name="FK_Tarifa_Lote">
+          <End Type="ParkingLiteDBModel.Lote" Role="Lote" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ParkingLiteDBModel.Tarifa" Role="Tarifa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lote">
+              <PropertyRef Name="IdLote" />
+            </Principal>
+            <Dependent Role="Tarifa">
+              <PropertyRef Name="IdLote" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Monitoreo">
+          <Key>
+            <PropertyRef Name="IdMonitoreo" />
+          </Key>
+          <Property Name="IdMonitoreo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEspacioDelimitado" Type="Int32" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="EspacioDelimitado" Relationship="ParkingLiteDBModel.FK_Monitoreo_EspacioDelimitado" FromRole="Monitoreo" ToRole="EspacioDelimitado" />
+        </EntityType>
+        <Association Name="FK_Monitoreo_EspacioDelimitado">
+          <End Type="ParkingLiteDBModel.EspacioDelimitado" Role="EspacioDelimitado" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ParkingLiteDBModel.Monitoreo" Role="Monitoreo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EspacioDelimitado">
+              <PropertyRef Name="IdEspacioDelimitado" />
+            </Principal>
+            <Dependent Role="Monitoreo">
+              <PropertyRef Name="IdEspacioDelimitado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ParkingLiteDBModelStoreContainer" CdmEntityContainer="ParkingLiteEntities">
+          <EntitySetMapping Name="EspaciosDelimitados">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.EspacioDelimitado">
+              <MappingFragment StoreEntitySet="EspacioDelimitado">
+                <ScalarProperty Name="Indice" ColumnName="Indice" />
+                <ScalarProperty Name="IdEspacioDelimitado" ColumnName="IdEspacioDelimitado" />
+                <ScalarProperty Name="Coord1" ColumnName="Coord1" />
+                <ScalarProperty Name="Coord2" ColumnName="Coord2" />
+                <ScalarProperty Name="Coord3" ColumnName="Coord3" />
+                <ScalarProperty Name="Coord4" ColumnName="Coord4" />
+                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+                <ScalarProperty Name="IdLote" ColumnName="IdLote" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lotes">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.Lote">
+              <MappingFragment StoreEntitySet="Lote">
+                <ScalarProperty Name="RutaModelo" ColumnName="RutaModelo" />
+                <ScalarProperty Name="FuenteVideo" ColumnName="FuenteVideo" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="IdLote" ColumnName="IdLote" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Nit" ColumnName="Nit" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculos">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.Vehiculo">
+              <MappingFragment StoreEntitySet="Vehiculo">
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="Vin" ColumnName="Vin" />
+                <ScalarProperty Name="NumeroMotor" ColumnName="NumeroMotor" />
+                <ScalarProperty Name="Clase" ColumnName="Clase" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Linea" ColumnName="Linea" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VehiculoTransacciones">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.VehiculoTransaccion">
+              <MappingFragment StoreEntitySet="VehiculoTransaccion">
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+                <ScalarProperty Name="IdLote" ColumnName="IdLote" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="TipoTransaccion" ColumnName="TipoTransaccion" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+                <ScalarProperty Name="IdTransaccion" ColumnName="IdTransaccion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tarifas">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.Tarifa">
+              <MappingFragment StoreEntitySet="Tarifa">
+                <ScalarProperty Name="FraccionMinimaPrecioFijo" ColumnName="FraccionMinimaPrecioFijo" />
+                <ScalarProperty Name="PrecioFijo" ColumnName="PrecioFijo" />
+                <ScalarProperty Name="PrecioFraccion" ColumnName="PrecioFraccion" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="IdLote" ColumnName="IdLote" />
+                <ScalarProperty Name="IdTarifa" ColumnName="IdTarifa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Monitoreos">
+            <EntityTypeMapping TypeName="ParkingLiteDBModel.Monitoreo">
+              <MappingFragment StoreEntitySet="Monitoreo">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdEspacioDelimitado" ColumnName="IdEspacioDelimitado" />
+                <ScalarProperty Name="IdMonitoreo" ColumnName="IdMonitoreo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
