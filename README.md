@@ -7,9 +7,11 @@ Estructura de la aplicación:
 
 1. Parking.Web
   
-    El proyecto WebApi2 Parking.Web contiene la interfaz RESTFul que se encarga de exponer a internet los servicios necesarios para el funcionamiento de la solución.        Utiliza controladores para organizar conjuntos de métodos de diferentes entidades, los controladores existentes son los siguientes: 
+    El proyecto WebApi2 Parking.Web contiene la interfaz RESTFul que se encarga de exponer a internet los servicios necesarios para el funcionamiento de la solución.        Utiliza controladores para organizar conjuntos de métodos de diferentes entidades,que permiten organizar las funcionalidades del API de forma estandarizada y estructurada, los controladores existentes son los siguientes: 
     
+    ![img](https://github.com/parkingmanager/RestApi/blob/main/README_DATA/1.png)
     
+    Internamente cada controlador posee los métodos de servicio que realizan las operaciones. Cabe resaltar que unicamente se encarga de gestionar las particularidades del protocolo HTTP y no de transformar información, unicamente la entrega al componente de Core.
 
 2. Parking.Core
 
