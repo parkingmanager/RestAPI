@@ -1,3 +1,8 @@
+El proyecto Parking Manager se integra a través de 4 repositorios:
+* [ClientApp](https://github.com/parkingmanager/ClientApp)
+* [DataBase](https://github.com/parkingmanager/RestAPI)
+* [Utils](https://github.com/parkingmanager/Utils)
+* [RestAPI](https://github.com/parkingmanager/RestAPI)
 # RestAPI
 Api Rest del proyecto parking manager
 
@@ -16,3 +21,4 @@ Estructura de la aplicación:
 2. Parking.Core
 
 
+#### Visite los repositorios de [ClientApp](https://github.com/parkingmanager/ClientApp.git) y [DataBase](https://github.com/parkingmanager/Database.git) para poder correr el proyecto.
